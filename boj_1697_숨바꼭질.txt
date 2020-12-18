@@ -1,0 +1,51 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+/*
+ * bfs 완전탐색
+ */
+public class Main{
+	static int n, k, ans;
+	static boolean visit[];
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		k = sc.nextInt();
+		ans = Integer.MAX_VALUE;
+		// 최대 100000까지 
+		// 이미 갔던 곳 다시 안가기 위해서 체크배열 사용
+		visit = new boolean[100001];
+		solve(n, k, 0);
+		System.out.println(ans);
+	}
+
+	private static void solve(int i, int j, int cnt) {
+		Queue<int[]> q = new LinkedList<int[]>();
+		q.offer(new int[] { i, cnt });
+		visit[i] = true;
+		while (!q.isEmpty()) {
+			int[] cur = q.poll();
+			int s = cur[0];
+			int count = cur[1];
+			if (s == k) {
+				ans = Math.min(ans, count);
+				return;
+			}
+			if (s - 1 >= 0 && !visit[s - 1]) {
+				visit[s - 1] = true;
+				q.offer(new int[] { s - 1, count + 1 });
+			}
+			if (s + 1 <= 100000 && !visit[s + 1]) {
+				visit[s + 1] = true;
+				q.offer(new int[] { s + 1, count + 1 });
+			}
+			if (s * 2 <= 100000 && !visit[s * 2]) {
+				visit[s * 2] = true;
+				q.offer(new int[] { s * 2, count + 1 });
+			}
+		}
+
+	}
+}
