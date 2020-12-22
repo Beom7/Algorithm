@@ -1,0 +1,112 @@
+import java.util.Scanner;
+/*
+ * 순열 permutation
+ */
+public class Main {
+	static int n, m, k;
+	static int map[][];
+	static int copy[][];
+
+	static class point {
+		int r;
+		int c;
+		int s;
+
+		public point(int r, int c, int s) {
+			super();
+			this.r = r;
+			this.c = c;
+			this.s = s;
+		}
+	}
+
+	static point[] list;
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt() + 1;
+		m = sc.nextInt() + 1;
+		k = sc.nextInt();
+		map = new int[n][m];
+		for (int i = 1; i < n; i++) {
+			for (int j = 1; j < m; j++) {
+				map[i][j] = sc.nextInt();
+			}
+		}
+		list = new point[k];
+		for (int i = 0; i < k; i++) {
+			list[i] = new point(sc.nextInt(), sc.nextInt(), sc.nextInt());
+		}
+		visit = new boolean[k];
+		select = new int[k];
+		solve(0);
+		System.out.println(ans);
+	}
+
+	static boolean visit[];
+	static int select[];
+	static int ans = Integer.MAX_VALUE;
+	private static void solve(int cnt) {
+		if (cnt == k) {
+			move(0, map);
+			return;
+		}
+		for (int i = 0; i < k; i++) {
+			if (!visit[i]) {
+				visit[i] = true;
+				select[cnt] = i;
+				solve(cnt + 1);
+				visit[i] = false;
+			}
+		}
+	}
+
+	private static void move(int cnt, int tmp[][]) {
+		// TODO Auto-generated method stub
+		// 복사
+		int copy[][] = new int[n][m];
+		for (int i = 1; i < n; i++) {
+			copy[i] = tmp[i].clone();
+		}
+		// 값 계산
+		if(cnt == k) {
+			for (int i = 1; i < n; i++) {
+				int sum = 0;
+				for (int j = 1; j < m; j++) {
+					sum += copy[i][j];
+					if(sum > ans)
+						break;
+				}
+				ans = Math.min(ans, sum);
+			}
+			return;
+		}
+		int idx = select[cnt];
+		point cur = list[idx];
+		int r = cur.r;
+		int c = cur.c;
+		int s = cur.s;
+		for (int t = s; t > 0; t--) {
+			int start = copy[r-t][c-t];
+			// 위로 가는것 부터 바꿔줘야겠네
+			for (int i = r-t; i < r+t; i++) {
+				copy[i][c-t] = copy[i+1][c-t]; 
+			}
+			// 왼쪽으로 가는것
+			for (int i = c-t; i < c+t; i++) {
+				copy[r+t][i] = copy[r+t][i+1]; 
+			}
+			// 밑으로 가는 것
+			for (int i = r+t; i > r-t; i--) {
+				copy[i][c+t] = copy[i-1][c+t]; 
+			}
+			// 오른쪽으로 가는 것
+			for (int i = c+t; i > c-t; i--) {
+				copy[r-t][i] = copy[r-t][i-1]; 
+			}
+			// 시작꺼는 오른쪽에 넣게 된다.
+			copy[r-t][c-t+1] = start;
+		}
+		move(cnt+1, copy);
+	}
+}
