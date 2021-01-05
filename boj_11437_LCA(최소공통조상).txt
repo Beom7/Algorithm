@@ -1,0 +1,71 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+/*
+ * lca알고리즘
+ * tmdwkd@
+ */
+public class Main{
+	static ArrayList<Integer>node[];
+	static int dp[],parent[];
+	static boolean visit[];
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int T = sc.nextInt();
+		node = new ArrayList[50001];
+		dp = new int[50001];
+		parent = new int[50001];
+		visit = new boolean[50001];
+		for (int i = 0; i < node.length; i++) {
+			node[i] = new ArrayList<>();
+		}
+		// 입력 받기
+		for (int i = 1; i < T; i++) {
+			int a = sc.nextInt();
+			int b = sc.nextInt();
+			node[a].add(b);
+			node[b].add(a);
+		}
+		// 각 노드 깊이 표시
+		dfs(1,0);
+		
+		int m = sc.nextInt();
+		for (int i = 0; i < m; i++) {
+			int a = sc.nextInt();
+			int b = sc.nextInt();
+			int result = lca(a,b);
+			System.out.println(result);
+		}
+		
+	}
+	private static int lca(int a, int b) {
+		// TODO Auto-generated method stub
+		while(dp[a] != dp[b]) {
+			// 더 깊은쪽 위로 올리기
+			if(dp[a] > dp[b]) {
+				a = parent[a];
+			}
+			else {
+				b = parent[b];
+			}
+		}
+		while(a != b) {
+			a = parent[a];
+			b = parent[b];
+		}
+		return a;
+		
+	}
+	private static void dfs(int i, int depth) {
+		// TODO Auto-generated method stub
+		visit[i] = true;
+		dp[i] = depth;
+		for (int j = 0; j < node[i].size(); j++) {
+			int next = node[i].get(j);
+			if(!visit[next]) {
+				// 부모 노드 저장
+				parent[next] = i;
+				dfs(next,depth+1);
+			}
+		}
+	}
+}
