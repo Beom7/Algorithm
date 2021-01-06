@@ -1,0 +1,27 @@
+import java.util.Scanner;
+/*
+ * hanoi
+ * System.out.println()을 사용하면 시간초과 발생
+ * 그래서 StringBuilder를 사용하여 모아서 한번에 출력
+ */
+public class Main{
+	static int n;
+	static StringBuilder sb = new StringBuilder();
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		System.out.println((1<<n)-1);
+		hanoi(n,1,2,3);
+		System.out.println(sb.toString());
+	}
+	private static void hanoi(int cnt,int start,int mid,int end) {
+		// TODO Auto-generated method stub
+		if(cnt == 1) {
+			sb.append(start+" "+end+"\n");
+			return;
+		}
+		hanoi(cnt-1, start,end,mid);
+		sb.append(start+" "+end+"\n");
+		hanoi(cnt-1,mid,start,end);
+	}
+}
