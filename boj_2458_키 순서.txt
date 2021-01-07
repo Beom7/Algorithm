@@ -1,0 +1,70 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+/*
+ * dfs깊이우선탐색
+ * 나보다 작은 노드 검색 + 나보다 큰 노드 검색
+ * 확인된 갯수가 n-1이면 내 위치를 알 수 있다라고 가정
+ */
+public class Main{
+	static int n, m;
+	static ArrayList<Integer> down[], up[];
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		m = sc.nextInt();
+		down = new ArrayList[n];
+		up = new ArrayList[n];
+		for (int i = 0; i < n; i++) {
+			down[i] = new ArrayList<>();
+			up[i] = new ArrayList<>();
+		}
+		for (int i = 0; i < m; i++) {
+			int a = sc.nextInt() - 1;
+			int b = sc.nextInt() - 1;
+			down[b].add(a);
+			up[a].add(b);
+		}
+		int ans = 0;
+		for (int i = 0; i < n; i++) {
+			count = 0;
+			visit = new boolean[n];
+			downCnt(i);
+			visit = new boolean[n];
+			upCnt(i);
+			if (count == n - 1) {
+				ans++;
+			}
+		}
+		System.out.println(ans);
+	}
+
+	private static void upCnt(int idx) {
+		// TODO Auto-generated method stub
+		
+		for (int i = 0; i < up[idx].size(); i++) {
+			int next = up[idx].get(i);
+			if (!visit[next]) {
+				visit[next] = true;
+				count++;
+				upCnt(next);
+			}
+		}
+	}
+
+	static int count;
+	static boolean visit[];
+
+	private static void downCnt(int idx) {
+		// TODO Auto-generated method stub
+		
+		for (int i = 0; i < down[idx].size(); i++) {
+			int next = down[idx].get(i);
+			if (!visit[next]) {
+				visit[next] = true;
+				count++;
+				downCnt(next);
+			}
+		}
+	}
+}
