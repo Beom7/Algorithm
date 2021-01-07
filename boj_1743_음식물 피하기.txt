@@ -1,0 +1,53 @@
+import java.util.Scanner;
+/*
+ * dfs(깊이 우선 탐색)알고리즘
+ */
+public class Main {
+	static int n, m, k;
+	static int dy[] = { -1, 1, 0, 0 };
+	static int dx[] = { 0, 0, -1, 1 };
+	static int map[][];
+	static boolean visit[][];
+	static int ans,count;
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		m = sc.nextInt();
+		k = sc.nextInt();
+		map = new int[n][m];
+		visit = new boolean[n][m];
+		ans = Integer.MIN_VALUE;
+		for (int i = 0; i < k; i++) {
+			int r = sc.nextInt() - 1;
+			int c = sc.nextInt() - 1;
+			map[r][c] = 1;
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (map[i][j] == 1 && !visit[i][j]) {
+					visit[i][j] = true;
+					count = 0;
+					dfs(i, j);
+					ans = Math.max(ans, count);
+				}
+			}
+		}
+		System.out.println(ans);
+	}
+
+	private static void dfs(int i, int j) {
+		// TODO Auto-generated method stub
+		count++;
+		for (int d = 0; d < 4; d++) {
+			int ny = i + dy[d];
+			int nx = j + dx[d];
+			if(ny>=0 && nx>=0 && ny< n && nx<m) {
+				if(map[ny][nx] == 1 && !visit[ny][nx]) {
+					visit[ny][nx] = true;
+					dfs(ny,nx);
+				}
+			}
+		}
+	}
+}
