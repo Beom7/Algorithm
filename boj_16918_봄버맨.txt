@@ -1,0 +1,96 @@
+/*
+ * 탐색
+ */
+import java.util.Scanner;
+
+public class Main{
+	static int dy[] = { -1, 1, 0, 0 };
+	static int dx[] = { 0, 0, -1, 1 };
+	static point map[][];
+	static int r, c, n;
+
+	static class point {
+		char c;
+		int time;
+
+		public point(char c, int time) {
+			super();
+			this.c = c;
+			this.time = time;
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		r = sc.nextInt();
+		c = sc.nextInt();
+		n = sc.nextInt();
+		map = new point[r][c];
+
+		for (int i = 0; i < r; i++) {
+			String s = new String();
+			s = sc.next();
+			for (int j = 0; j < s.length(); j++) {
+				char c = s.charAt(j);
+				if (c == 'O') {
+					map[i][j] = new point(c, 0);
+				} else {
+					map[i][j] = new point(c, -1);
+				}
+			}
+		}
+		int time = 0;
+		boolean flag = false;
+		while (true) {
+			time++;
+			// 설치
+			if (!flag) {
+				if (time > 1) {
+					flag = true;
+					for (int i = 0; i < r; i++) {
+						for (int j = 0; j < c; j++) {
+							if (map[i][j].c == '.') {
+								map[i][j] = new point('O', time);
+							}
+						}
+					}
+				}
+			}
+			// 폭발
+			else {
+				if (time > 2) {
+					flag = false;
+					for (int i = 0; i < r; i++) {
+						for (int j = 0; j < c; j++) {
+							if (map[i][j].c == 'O' && map[i][j].time == time - 3) {
+								map[i][j] = new point('.', -1);
+								for (int d = 0; d < 4; d++) {
+									int ny = i + dy[d];
+									int nx = j + dx[d];
+									if (ny >= 0 && nx >= 0 && ny < r && nx < c) {
+										if (map[ny][nx].c == 'O') {
+											// 터져야할 위치여서 이번에는 연쇄폭발에서는 터지지 않게함
+											if (map[ny][nx].time == time - 3)
+												continue;
+
+											map[ny][nx] = new point('.', -1);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (time == n)
+				break;
+		}
+		for (int i = 0; i < r; i++) {
+			for (int j = 0; j < c; j++) {
+				System.out.print(map[i][j].c);
+			}
+			System.out.println();
+		}
+	}
+}
