@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+/*
+ * hash
+ */
+public class Main{
+	public static void main(String[] args) {
+		String s = "KAKAO";
+		int [] a = solution(s);
+	}
+
+	static ArrayList<Integer>list;
+	static HashMap<String, Integer>hash;
+	private static int[] solution(String s) {
+		// TODO Auto-generated method stub
+		list = new ArrayList<>();
+		hash = new HashMap<>();
+		init();
+		int number = 27;
+		boolean end = false;
+		for (int i = 0; i < s.length(); i++) {
+			String tmp = s.charAt(i)+"";
+			// 해당 값이 존재하면 더 늘려본다.
+			
+			while(hash.containsKey(tmp)) {
+				i++;
+				if(i == s.length()) {
+					end = true;
+					break;
+				}
+				tmp += s.charAt(i);
+			}
+			// 끝까지 간경우
+			if(end) {
+				// 숫자값만 넣어줌
+				list.add(hash.get(tmp));
+				break;
+			}
+			// 다음꺼 더하기 전의 해쉬안에 있는 숫자값 가져오기
+			list.add(hash.get(tmp.substring(0,tmp.length()-1)));
+			// 해쉬에 다음꺼 더한거 넣기
+			hash.put(tmp, number++);
+			// 붙이기 이전의 가리키는 위치로 돌려준다 
+			i--;
+		}
+		int [] answer = new int[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			answer[i] = list.get(i);
+		}
+		return answer;
+	}
+	private static void init() {
+		// TODO Auto-generated method stub
+		char c = 'A';
+		for (int i = 0; i < 27; i++) {
+			hash.put(c+"", i+1);
+			c += 1;
+		}
+	}
+}
