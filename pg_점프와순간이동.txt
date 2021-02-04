@@ -1,0 +1,23 @@
+public class Main{
+	public static void main(String[] args) {
+		int ans = solution(5000);
+		System.out.println(ans);
+	}
+
+	public static int solution(int n) {
+		int cnt = 0;
+		while(true) {
+			if(n == 0)
+				break;
+			if(n % 2== 0) {
+				n /= 2;
+			}
+			else {
+				cnt++;
+				n--;
+			}
+		}
+		return cnt;
+	}
+
+}
